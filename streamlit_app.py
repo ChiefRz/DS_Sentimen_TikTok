@@ -43,10 +43,10 @@ init_db()
 def load_model():
     try:
         model = joblib.load('model_svm.joblib')
-        vectorizer = joblib.load('tfidf_vectorizer.joblib')
+        vectorizer = joblib.load('vectorized.joblib')
         return model, vectorizer
     except FileNotFoundError:
-        st.error("File model 'model_svm.joblib' atau 'tfidf_vectorizer.joblib' tidak ditemukan.")
+        st.error("File model 'model_svm.joblib' atau 'vectorized.joblib' tidak ditemukan.")
         st.stop() # Menghentikan eksekusi jika file tidak ada
 
 model, vectorizer = load_model()
