@@ -54,8 +54,8 @@ create_table(conn)
 def load_model_and_vectorizer():
     """Memuat model SVM dan TF-IDF Vectorizer dari file joblib."""
     try:
-        model = joblib.load('model_svm.joblib')
-        vectorizer = joblib.load('vectorizer.joblib')
+        model = joblib.load('/model_svm.joblib')
+        vectorizer = joblib.load('/vectorizer.joblib')
         return model, vectorizer
     except FileNotFoundError:
         st.error("Pastikan file 'model_svm.joblib' dan 'vectorizer.joblib' ada di folder yang sama.")
