@@ -78,6 +78,11 @@ def load_model_and_vectorizer():
         st.stop()
 
 # Inisialisasi stemmer dan stopwords di luar fungsi agar efisien
+try:
+    stopwords.words('indonesian')
+except LookupError:
+    nltk.download('stopwords')
+    
 factory = StemmerFactory()
 stemmer = factory.create_stemmer()
 list_stopwords = set(stopwords.words('indonesian'))
