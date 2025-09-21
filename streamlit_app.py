@@ -151,7 +151,7 @@ if uploaded_file is not None:
                     negative_text = df_processed[df_processed['prediksi_sentimen'] == 'negatif']['text_cleaned']
 
                     # 2. Buat dua kolom untuk tata letak
-                    col1_wc, col2_wc = st.columns(2)
+                    col1_wc, col2_wc = st.columns([2, 2])
 
                     # 3. Buat word cloud untuk sentimen positif
                     with col1_wc:
