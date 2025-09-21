@@ -57,25 +57,25 @@ model, vectorizer = load_model_and_vectorizer()
 # Tahap 9 & 11: Antarmuka (UI) dan Visualisasi
 # =================================================================================
 
-st.set_page_config(page_title="Analisis Sentimen SVM", page_icon="🤖", layout="wide")
-st.title("🤖 Aplikasi Analisis Sentimen Menggunakan SVM")
+st.set_page_config(page_title="Analisis Sentimen SVM", layout="wide")
+st.title("Aplikasi Analisis Sentimen Menggunakan SVM")
 st.write("Unggah file CSV Anda, dan aplikasi ini akan memprediksi sentimen dari kolom teks yang Anda pilih menggunakan model SVM.")
 st.markdown("---")
 
 with st.sidebar:
-    st.header("📤 Upload Data Anda")
+    st.header("Upload Data Anda")
     uploaded_file = st.file_uploader("Pilih file CSV...", type=["csv"])
 
 if uploaded_file is not None:
     try:
         df_input = pd.read_csv(uploaded_file)
-        st.info(f"✅ File **{uploaded_file.name}** berhasil diunggah. Pratinjau data:")
+        st.info(f"File **{uploaded_file.name}** berhasil diunggah ✅. Pratinjau data:")
         st.dataframe(df_input.head())
 
         available_columns = df_input.columns.tolist()
         text_column = st.selectbox("Pilih kolom yang berisi teks untuk dianalisis:", options=available_columns)
 
-        analyze_button = st.button("🚀 Lakukan Analisis Sentimen", type="primary")
+        analyze_button = st.button("Lakukan Analisis Sentimen", type="primary")
 
         if analyze_button:
             with st.spinner('Sedang menganalisis data... Proses ini mungkin memakan waktu beberapa saat.'):
