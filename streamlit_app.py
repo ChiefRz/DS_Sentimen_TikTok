@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import scikit-learn
 import joblib
 import re
 import sqlite3
