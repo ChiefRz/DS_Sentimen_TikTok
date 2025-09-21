@@ -139,45 +139,45 @@ if uploaded_file is not None:
                     
                     # Menampilkan chart di Streamlit
                     st.plotly_chart(fig, use_container_width=True)
+                
+                # =================================================================
+                # Tahap 11.2: Visualisasi Kata Kunci (Word Cloud)
+                # =================================================================
+                st.markdown("---")
+                st.header("Kata Kunci Dominan Berdasarkan Sentimen")
 
-                    # =================================================================
-                    # Tahap 11.2: Visualisasi Kata Kunci (Word Cloud)
-                    # =================================================================
-                    st.markdown("---")
-                    st.header("Kata Kunci Dominan Berdasarkan Sentimen")
+                # 1. Filter data berdasarkan sentimen dari kolom 'text_cleaned'
+                positive_text = df_processed[df_processed['prediksi_sentimen'] == 'positif']['text_cleaned']
+                negative_text = df_processed[df_processed['prediksi_sentimen'] == 'negatif']['text_cleaned']
 
-                    # 1. Filter data berdasarkan sentimen dari kolom 'text_cleaned'
-                    positive_text = df_processed[df_processed['prediksi_sentimen'] == 'positif']['text_cleaned']
-                    negative_text = df_processed[df_processed['prediksi_sentimen'] == 'negatif']['text_cleaned']
+                # 2. Buat dua kolom untuk tata letak
+                col1_wc, col2_wc = st.columns(2)
 
-                    # 2. Buat dua kolom untuk tata letak
-                    col1_wc, col2_wc = st.columns([2, 2])
+                # 3. Buat word cloud untuk sentimen positif
+                with col1_wc:
+                    st.subheader("🟢 Kata Kunci Positif")
+                    full_positive_text = " ".join(text for text in positive_text)
 
-                    # 3. Buat word cloud untuk sentimen positif
-                    with col1_wc:
-                        st.subheader("🟢 Kata Kunci Positif")
-                        full_positive_text = " ".join(text for text in positive_text)
-
-                        if full_positive_text.strip():
-                            wordcloud_pos = WordCloud(width=800, height=400, background_color="white", colormap='Greens').generate(full_positive_text)
-                            st.image(wordcloud_pos.to_array(), use_column_width=True)
-                        else:
-                            st.info("Tidak ada kata kunci positif yang ditemukan untuk divisualisasikan.")
+                    if full_positive_text.strip():
+                        wordcloud_pos = WordCloud(width=800, height=400, background_color="white", colormap='Greens').generate(full_positive_text)
+                        st.image(wordcloud_pos.to_array(), use_column_width=True)
+                    else:
+                        st.info("Tidak ada kata kunci positif yang ditemukan untuk divisualisasikan.")
 
                     # 4. Buat word cloud untuk sentimen negatif
-                    with col2_wc:
-                        st.subheader("🔴 Kata Kunci Negatif")
-                        full_negative_text = " ".join(text for text in negative_text)
+                with col2_wc:
+                    st.subheader("🔴 Kata Kunci Negatif")
+                    full_negative_text = " ".join(text for text in negative_text)
 
-                        if full_negative_text.strip():
-                            wordcloud_neg = WordCloud(width=800, height=400, background_color="white", colormap='Reds').generate(full_negative_text)
-                            st.image(wordcloud_neg.to_array(), use_column_width=True)
-                        else:
-                            st.info("Tidak ada kata kunci negatif yang ditemukan untuk divisualisasikan.")
+                    if full_negative_text.strip():
+                        wordcloud_neg = WordCloud(width=800, height=400, background_color="white", colormap='Reds').generate(full_negative_text)
+                        st.image(wordcloud_neg.to_array(), use_column_width=True)
+                    else:
+                        st.info("Tidak ada kata kunci negatif yang ditemukan untuk divisualisasikan.")
                     # =================================================================
                     # AKHIR DARI BLOK WORD CLOUD
-                    # =================================================================
-                
+                    # =================================================================            
+                    
     except Exception as e:
         st.error(f"Terjadi kesalahan: {e}")
 else:
