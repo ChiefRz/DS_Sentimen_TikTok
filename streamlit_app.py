@@ -3,7 +3,7 @@ import pandas as pd
 import joblib
 import re
 import nltk
-import plotlub.express as px
+import plotly.express as px
 import matplotlib.pyplot as plt
 from nltk.corpus import stopwords
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
