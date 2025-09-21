@@ -94,17 +94,17 @@ if uploaded_file is not None:
                 # Tahap 11: Visualisasi
                 st.subheader("Visualisasi Ringkasan Utama")
                 total_data = len(df_processed)
-                sentiment_counts = df_processed['prediksi_sentimen'].value_counts()
-                sentiment_df = sentiment_counts.reset_index()
-                sentiment_df.columns = ['sentimen', 'jumlah'] 
+                sentimen_counts = df_processed['prediksi_sentimen'].value_counts()
+                sentimen_df = sentimen_counts.reset_index()
+                sentimen_df.columns = ['sentimen', 'jumlah'] 
                 
                 col1, col2 = st.columns([1, 2]) # Membuat 2 kolom dengan rasio lebar 1:2
                 with col1:
                     st.markdown("#### Metrik Utama")
                     st.metric(label="Total Data Dianalisis", value=f"{total_data} Komentar")
                     # Menampilkan persentase untuk setiap sentimen
-                    for sentimen in sentiment_df['sentimen']:
-                        count = sentiment_df[sentiment_df['sentimen'] == sentimen]['jumlah'].iloc[0]
+                    for sentimen in sentimen_df['sentimen']:
+                        count = sentimen_df[sentimen_df['sentimen'] == sentimen]['jumlah'].iloc[0]
                         percentage = (count / total_data) * 100
                         st.write(f"**{sentimen}:** {count} komentar ({percentage:.1f}%)")
                         
@@ -113,7 +113,7 @@ if uploaded_file is not None:
                     
                     # Membuat Donut Chart dengan Plotly
                     fig = px.pie(
-                        sentiment_df,
+                        sentimen_df,
                         names='sentimen',
                         values='jumlah',
                         hole=0.5, # Ini yang membuat pie chart menjadi donut char
