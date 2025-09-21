@@ -177,7 +177,71 @@ if uploaded_file is not None:
                     # =================================================================
                     # AKHIR DARI BLOK WORD CLOUD
                     # =================================================================            
+
+                # =================================================================
+                # Tahap 11.3: Menampilkan Contoh Komentar Aktual
+                # =================================================================
+                st.markdown("---")
+                st.header("💬 Contoh Komentar Aktual")
+
+                # Jumlah komentar yang ingin ditampilkan per kategori
+                n_samples = 3 
+
+                # Membuat tiga kolom
+                col1_comment, col2_comment, col3_comment = st.columns(3)
+
+                # --- Kolom Komentar Positif ---
+                with col1_comment:
+                    st.subheader("🟢 Positif")
+                    positive_comments = df_processed[df_processed['sentimen_prediksi'] == 'positif']
                     
+                    if positive_comments.empty:
+                        st.info("Tidak ada komentar positif yang ditemukan.")
+                    else:
+                        # Ambil sampel acak, jika jumlah data kurang, ambil semuanya
+                        try:
+                            samples = positive_comments.sample(n_samples)
+                        except ValueError:
+                            samples = positive_comments
+                        
+                        # Tampilkan setiap sampel menggunakan st.success
+                        for _, row in samples.iterrows():
+                            st.success(f"_{row[text_column]}_")
+
+                # --- Kolom Komentar Negatif ---
+                with col2_comment:
+                    st.subheader("🔴 Negatif")
+                    negative_comments = df_processed[df_processed['sentimen_prediksi'] == 'negatif']
+
+                    if negative_comments.empty:
+                        st.info("Tidak ada komentar negatif yang ditemukan.")
+                    else:
+                        try:
+                            samples = negative_comments.sample(n_samples)
+                        except ValueError:
+                            samples = negative_comments
+
+                        for _, row in samples.iterrows():
+                            st.error(f"_{row[text_column]}_")
+
+                # --- Kolom Komentar Netral ---
+                with col3_comment:
+                    st.subheader("⚪ Netral")
+                    neutral_comments = df_processed[df_processed['sentimen_prediksi'] == 'netral']
+                    
+                    if neutral_comments.empty:
+                        st.info("Tidak ada komentar netral yang ditemukan.")
+                    else:
+                        try:
+                            samples = neutral_comments.sample(n_samples)
+                        except ValueError:
+                            samples = neutral_comments
+
+                        for _, row in samples.iterrows():
+                            st.info(f"_{row[text_column]}_")
+                # =================================================================
+                # AKHIR DARI BLOK CONTOH KOMENTAR
+                # =================================================================    
     except Exception as e:
         st.error(f"Terjadi kesalahan: {e}")
 else:
