@@ -188,12 +188,12 @@ if uploaded_file is not None:
                 n_samples = 3 
 
                 # Membuat tiga kolom
-                col1_comment, col2_comment, col3_comment = st.columns(3)
+                col1_comment, col2_comment = st.columns(2)
 
                 # --- Kolom Komentar Positif ---
                 with col1_comment:
                     st.subheader("🟢 Positif")
-                    positive_comments = df_processed[df_processed['sentimen_prediksi'] == 'positif']
+                    positive_comments = df_processed[df_processed['prediksi_sentimen'] == 'positif']
                     
                     if positive_comments.empty:
                         st.info("Tidak ada komentar positif yang ditemukan.")
@@ -211,7 +211,7 @@ if uploaded_file is not None:
                 # --- Kolom Komentar Negatif ---
                 with col2_comment:
                     st.subheader("🔴 Negatif")
-                    negative_comments = df_processed[df_processed['sentimen_prediksi'] == 'negatif']
+                    negative_comments = df_processed[df_processed['prediksi_sentimen'] == 'negatif']
 
                     if negative_comments.empty:
                         st.info("Tidak ada komentar negatif yang ditemukan.")
@@ -223,22 +223,6 @@ if uploaded_file is not None:
 
                         for _, row in samples.iterrows():
                             st.error(f"_{row[text_column]}_")
-
-                # --- Kolom Komentar Netral ---
-                with col3_comment:
-                    st.subheader("⚪ Netral")
-                    neutral_comments = df_processed[df_processed['sentimen_prediksi'] == 'netral']
-                    
-                    if neutral_comments.empty:
-                        st.info("Tidak ada komentar netral yang ditemukan.")
-                    else:
-                        try:
-                            samples = neutral_comments.sample(n_samples)
-                        except ValueError:
-                            samples = neutral_comments
-
-                        for _, row in samples.iterrows():
-                            st.info(f"_{row[text_column]}_")
                 # =================================================================
                 # AKHIR DARI BLOK CONTOH KOMENTAR
                 # =================================================================    
