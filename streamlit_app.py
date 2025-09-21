@@ -98,7 +98,7 @@ if uploaded_file is not None:
                 sentimen_df = sentimen_counts.reset_index()
                 sentimen_df.columns = ['sentimen', 'jumlah'] 
                 
-                col1, col2 = st.columns([1, 2]) # Membuat 2 kolom dengan rasio lebar 1:2
+                col1, col2 = st.columns([2, 3]) # Membuat 2 kolom dengan rasio lebar 1:2
                 with col1:
                     st.markdown("#### Metrik Utama")
                     st.metric(label="Total Data Dianalisis", value=f"{total_data} Komentar")
