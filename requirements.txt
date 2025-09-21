@@ -6,3 +6,4 @@ plotly==6.3.0
 Sastrawi==1.0.1
 Sastrawi==1.0.1
 streamlit==1.49.1
+wordcloud==1.9.4
