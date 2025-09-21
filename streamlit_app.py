@@ -2,64 +2,14 @@ import streamlit as st
 import pandas as pd
 import joblib
 import re
-import sqlite3
 import nltk
 import matplotlib.pyplot as plt
-from datetime import datetime
 from nltk.corpus import stopwords
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
 # =================================================================================
 # Tahap 8: Persiapan dan Fungsi Database
 # =================================================================================
-
-# Fungsi untuk membuat koneksi ke database
-def create_connection(db_file):
-    """Membuat koneksi ke database SQLite."""
-    conn = None
-    try:
-        conn = sqlite3.connect(db_file)
-    except sqlite3.Error as e:
-        st.error(f"Error connecting to database: {e}")
-    return conn
-
-# Fungsi untuk membuat tabel log jika belum ada
-def create_log_table(conn):
-    """Membuat tabel analysis_log jika belum ada."""
-    try:
-        c = conn.cursor()
-        c.execute('''
-            CREATE TABLE IF NOT EXISTS analysis_log (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                timestamp TEXT NOT NULL,
-                file_name TEXT NOT NULL,
-                total_data INTEGER NOT NULL,
-                positive_count INTEGER NOT NULL,
-                negative_count INTEGER NOT NULL
-            );
-        ''')
-    except sqlite3.Error as e:
-        st.error(f"Error creating table: {e}")
-
-# Fungsi untuk menyimpan log hasil analisis ke database
-def save_analysis_log(conn, file_name, total_data, counts):
-    """Menyimpan ringkasan hasil analisis ke database."""
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    log_data = (
-        timestamp,
-        file_name,
-        total_data,
-        int(counts.get('positif', 0)), # Ambil nilai, default 0 jika tidak ada
-        int(counts.get('negatif', 0))
-    )
-    sql = ''' INSERT INTO analysis_log(timestamp,file_name,total_data,positive_count,negative_count)
-              VALUES(?,?,?,?,?) '''
-    try:
-        c = conn.cursor()
-        c.execute(sql, log_data)
-        conn.commit()
-    except sqlite3.Error as e:
-        st.error(f"Error saving log to database: {e}")
 
 
 # =================================================================================
@@ -100,10 +50,6 @@ def preprocess_text(text):
 
 # Memuat model di awal
 model, vectorizer = load_model_and_vectorizer()
-# Menyiapkan database
-db_conn = create_connection("sentimen_log.db")
-if db_conn is not None:
-    create_log_table(db_conn)
 
 # =================================================================================
 # Tahap 9 & 11: Antarmuka (UI) dan Visualisasi
@@ -161,29 +107,10 @@ if uploaded_file is not None:
                     ax.axis('equal')
                     st.pyplot(fig)
                 
-                # Tahap 8: Simpan ke Database
-                if db_conn is not None:
-                    save_analysis_log(db_conn, uploaded_file.name, len(df_processed), sentiment_counts)
-                    st.success("Analisis berhasil diselesaikan dan hasilnya telah dicatat dalam database!")
-                else:
-                    st.warning("Analisis selesai, namun gagal terhubung ke database untuk menyimpan log.")
-                
     except Exception as e:
         st.error(f"Terjadi kesalahan: {e}")
 else:
     st.warning("Silakan unggah file CSV melalui sidebar untuk memulai.")
 
-# Menampilkan riwayat analisis dari database (opsional)
 st.markdown("---")
-st.header("📜 Riwayat Analisis")
-if db_conn is not None:
-    try:
-        history_df = pd.read_sql_query("SELECT * FROM analysis_log ORDER BY timestamp DESC", db_conn)
-        st.dataframe(history_df)
-    except Exception as e:
-        st.warning("Tidak dapat memuat riwayat analisis.")
-else:
-    st.info("Database tidak terhubung. Riwayat tidak dapat ditampilkan.")
-
-st.markdown("---")
-st.write("Dibuat dengan ❤️ menggunakan Streamlit & Scikit-learn.")
+st.write("Dibuat menggunakan Streamlit.")
