@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import scikit-learn
 import joblib
 import re
 import sqlite3
@@ -82,7 +83,7 @@ try:
     stopwords.words('indonesian')
 except LookupError:
     nltk.download('stopwords')
-    
+
 factory = StemmerFactory()
 stemmer = factory.create_stemmer()
 list_stopwords = set(stopwords.words('indonesian'))
