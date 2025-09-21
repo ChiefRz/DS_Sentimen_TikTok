@@ -3,6 +3,7 @@ import pandas as pd
 import joblib
 import re
 import nltk
+import plotlub.express as px
 import matplotlib.pyplot as plt
 from nltk.corpus import stopwords
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
@@ -91,21 +92,52 @@ if uploaded_file is not None:
                 st.dataframe(df_processed[[text_column, 'prediksi_sentimen']])
                 
                 # Tahap 11: Visualisasi
-                st.subheader("Visualisasi Distribusi Sentimen")
+                st.subheader("Visualisasi Ringkasan Utama")
+                total_data = len(df_processed)
                 sentiment_counts = df_processed['prediksi_sentimen'].value_counts()
+                sentiment_df = sentiment_counts.reset_index()
+                sentiment_df.columns = ['sentimen', 'jumlah'] 
                 
-                col1, col2 = st.columns(2)
+                col1, col2 = st.columns([1, 2]) # Membuat 2 kolom dengan rasio lebar 1:2
                 with col1:
-                    st.write("#### Diagram Batang")
-                    st.bar_chart(sentiment_counts)
-                    st.write("Jumlah Sentimen:")
-                    st.dataframe(sentiment_counts)
+                    st.markdown("#### Metrik Utama")
+                    st.metric(label="Total Data Dianalisis", value=f"{total_data} Komentar")
+                    # Menampilkan persentase untuk setiap sentimen
+                    for sentiment in sentiment_df['sentiment']:
+                        count = sentiment_df[sentiment_df['sentiment'] == sentiment]['jumlah'].iloc[0]
+                        percentage = (count / total_data) * 100
+                        st.write(f"**{sentiment}:** {count} komentar ({percentage:.1f}%)")
+                        
                 with col2:
-                    st.write("#### Diagram Lingkaran")
-                    fig, ax = plt.subplots()
-                    ax.pie(sentiment_counts, labels=sentiment_counts.index, autopct='%1.1f%%', startangle=90, colors=['#66b3ff','#99ff99','#ff9999'])
-                    ax.axis('equal')
-                    st.pyplot(fig)
+                    st.markdown("#### Distribusi Sentimen")
+                    
+                    # Membuat Donut Chart dengan Plotly
+                    fig = px.pie(
+                        sentiment_df,
+                        names='sentiment',
+                        values='jumlah',
+                        hole=0.5, # Ini yang membuat pie chart menjadi donut char
+                        color='sentiment',
+                        color_discrete_map={
+                            'positif': '#4CAF50', # Hijau
+                            'negatif': '#F44336', # Merah
+                        }
+                    )
+                    
+                    # Menyesuaikan tampilan chart
+                    fig.update_traces(
+                        textposition='inside', 
+                        textinfo='percent+label',
+                        marker=dict(line=dict(color='#FFFFFF', width=2)) # Garis putih antar segmen
+                    )
+                    
+                    fig.update_layout(
+                        showlegend=False, # Menyembunyikan legenda karena info sudah ada di chart
+                        margin=dict(t=0, b=0, l=0, r=0) # Menghilangkan margin berlebih
+                    )
+                    
+                    # Menampilkan chart di Streamlit
+                    st.plotly_chart(fig, use_container_width=True)
                 
     except Exception as e:
         st.error(f"Terjadi kesalahan: {e}")
