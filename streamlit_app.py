@@ -20,11 +20,11 @@ from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 def load_model_and_vectorizer():
     """Memuat model SVM dan TF-IDF Vectorizer."""
     try:
-        model = joblib.load('model_svm (1).joblib')
-        vectorizer = joblib.load('vectorizer.joblib')
+        model = joblib.load('model_svm1.joblib')
+        vectorizer = joblib.load('vectorizer1.joblib')
         return model, vectorizer
     except FileNotFoundError:
-        st.error("File 'model_svm (1).joblib' atau 'vectorizer.joblib' tidak ditemukan. Pastikan file berada di folder yang sama.")
+        st.error("File 'model_svm1.joblib' atau 'vectorizer1.joblib' tidak ditemukan. Pastikan file berada di folder yang sama.")
         st.stop()
 
 # Inisialisasi stemmer dan stopwords di luar fungsi agar efisien
