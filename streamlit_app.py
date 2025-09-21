@@ -147,8 +147,8 @@ if uploaded_file is not None:
                     st.header("Kata Kunci Dominan Berdasarkan Sentimen")
 
                     # 1. Filter data berdasarkan sentimen dari kolom 'text_cleaned'
-                    positive_text = df_processed[df_processed['sentimen_prediksi'] == 'positif']['text_cleaned']
-                    negative_text = df_processed[df_processed['sentimen_prediksi'] == 'negatif']['text_cleaned']
+                    positive_text = df_processed[df_processed['prediksi_sentimen'] == 'positif']['text_cleaned']
+                    negative_text = df_processed[df_processed['prediksi_sentimen'] == 'negatif']['text_cleaned']
 
                     # 2. Buat dua kolom untuk tata letak
                     col1_wc, col2_wc = st.columns(2)
