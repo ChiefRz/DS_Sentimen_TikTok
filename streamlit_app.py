@@ -87,10 +87,9 @@ if uploaded_file is not None:
                 predictions = model.predict(features)
                 df_processed['prediksi_sentimen'] = predictions
                 
-                st.markdown("---")
-                
-                
                 # Tahap 11: Visualisasi
+                st.markdown("---")
+                st.header("📊 Hasil Analisis")
                 st.subheader("Visualisasi Ringkasan Utama")
                 total_data = len(df_processed)
                 sentimen_counts = df_processed['prediksi_sentimen'].value_counts()
@@ -261,7 +260,6 @@ if uploaded_file is not None:
                 # AKHIR DARI BLOK KESIMPULAN
                 # =================================================================
                 st.markdown("---")
-                st.header("📊 Hasil Analisis")
                 st.subheader("Tabel Data dengan Hasil Prediksi Sentimen")
                 st.dataframe(df_processed[[text_column, 'prediksi_sentimen']])
     except Exception as e:
