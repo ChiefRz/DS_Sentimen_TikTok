@@ -3,11 +3,13 @@ import pandas as pd
 import joblib
 import re
 import sqlite3
+import nltk
+import matplotlib.pyplot as plt
 from datetime import datetime
 from nltk.corpus import stopwords
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
-import matplotlib.pyplot as plt
 
+nltk.download('stopwords')
 # =================================================================================
 # Tahap 8: Persiapan dan Fungsi Database
 # =================================================================================

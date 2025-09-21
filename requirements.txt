@@ -3,5 +3,4 @@ matplotlib==3.10.6
 nltk==3.9.1
 pandas==2.3.2
 Sastrawi==1.0.1
-Sastrawi==1.0.1
 streamlit==1.49.1
