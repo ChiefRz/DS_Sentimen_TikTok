@@ -83,16 +83,16 @@ if uploaded_file is not None:
                 df_processed['text_cleaned'] = df_processed[text_column].apply(preprocess_text)
                 features = vectorizer.transform(df_processed['text_cleaned'])
                 predictions = model.predict(features)
-                df_processed['sentimen_prediksi'] = predictions
+                df_processed['prediksi_sentimen'] = predictions
                 
                 st.markdown("---")
                 st.header("📊 Hasil Analisis")
                 st.subheader("Tabel Data dengan Hasil Prediksi Sentimen")
-                st.dataframe(df_processed[[text_column, 'sentimen_prediksi']])
+                st.dataframe(df_processed[[text_column, 'prediksi_sentimen']])
                 
                 # Tahap 11: Visualisasi
                 st.subheader("Visualisasi Distribusi Sentimen")
-                sentiment_counts = df_processed['sentimen_prediksi'].value_counts()
+                sentiment_counts = df_processed['prediksi_sentimen'].value_counts()
                 
                 col1, col2 = st.columns(2)
                 with col1:
