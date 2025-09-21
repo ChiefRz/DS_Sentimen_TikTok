@@ -9,7 +9,6 @@ from datetime import datetime
 from nltk.corpus import stopwords
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
-nltk.download('stopwords')
 # =================================================================================
 # Tahap 8: Persiapan dan Fungsi Database
 # =================================================================================
