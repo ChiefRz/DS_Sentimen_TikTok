@@ -106,7 +106,7 @@ if uploaded_file is not None:
                     for sentimen in sentimen_df['sentimen']:
                         count = sentimen_df[sentimen_df['sentimen'] == sentimen]['jumlah'].iloc[0]
                         percentage = (count / total_data) * 100
-                        st.write(f"**{sentimen}:** {count} komentar ({percentage:.1f}%)")
+                        st.write(f"**{sentimen.capitalize()}:** {count} komentar ({percentage:.1f}%)")
                         
                 with col2:
                     st.markdown("#### Distribusi Sentimen")
