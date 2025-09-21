@@ -88,9 +88,7 @@ if uploaded_file is not None:
                 df_processed['prediksi_sentimen'] = predictions
                 
                 st.markdown("---")
-                st.header("📊 Hasil Analisis")
-                st.subheader("Tabel Data dengan Hasil Prediksi Sentimen")
-                st.dataframe(df_processed[[text_column, 'prediksi_sentimen']])
+                
                 
                 # Tahap 11: Visualisasi
                 st.subheader("Visualisasi Ringkasan Utama")
@@ -225,7 +223,47 @@ if uploaded_file is not None:
                             st.error(f"_{row[text_column]}_")
                 # =================================================================
                 # AKHIR DARI BLOK CONTOH KOMENTAR
-                # =================================================================    
+                # =================================================================
+                # =================================================================
+                # Tahap 11.4: Menampilkan Wawasan dan Kesimpulan
+                # =================================================================
+                st.markdown("---")
+                st.header("💡 Wawasan & Kesimpulan")
+
+                # Pastikan sentimen_counts tidak kosong
+                if not sentimen_counts.empty:
+                    # 1. Cari sentimen yang paling dominan (total_data sudah dihitung sebelumnya)
+                    dominant_sentiment = sentimen_counts.idxmax()
+                    dominant_count = sentimen_counts.max()
+                    dominant_percentage = (dominant_count / total_data) * 100
+
+                    # 2. Tentukan kalimat berdasarkan sentimen dominan
+                    if dominant_sentiment == 'positif':
+                        tendency_text = "cenderung **positif**"
+                        icon = "✅"
+                    else: 
+                        tendency_text = "cenderung **negatif**"
+                        icon = "❌"
+
+                    # 3. Rakit kalimat kesimpulan secara dinamis
+                    insight_text = f"""
+                    {icon} Dari total **{total_data} komentar** yang dianalisis, respon audiens secara umum {tendency_text}. 
+
+                    Sentimen **{dominant_sentiment.capitalize()}** menjadi yang paling menonjol, mencakup **{dominant_percentage:.1f}%** dari keseluruhan tanggapan.
+                    """
+
+                    # 4. Tampilkan kesimpulan dalam kotak info
+                    st.info(insight_text)
+
+                else:
+                    st.warning("Tidak ada data yang dapat disimpulkan.")
+                # =================================================================
+                # AKHIR DARI BLOK KESIMPULAN
+                # =================================================================
+                st.markdown("---")
+                st.header("📊 Hasil Analisis")
+                st.subheader("Tabel Data dengan Hasil Prediksi Sentimen")
+                st.dataframe(df_processed[[text_column, 'prediksi_sentimen']])
     except Exception as e:
         st.error(f"Terjadi kesalahan: {e}")
 else:
