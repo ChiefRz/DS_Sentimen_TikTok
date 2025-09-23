@@ -106,19 +106,19 @@ if uploaded_file is not None:
                     negative_percentage = 0
                 
                 if positive_count > negative_count:
-                    dominant_sentiment = "Cenderung Positif ✅"
+                    dominant_sentiment = "Cenderung Positif"
                 elif negative_count > positive_count:
-                    dominant_sentiment = "Cenderung Negatif ❌"
+                    dominant_sentiment = "Cenderung Negatif"
                 else:
-                    dominant_sentiment = "Seimbang ➖"
+                    dominant_sentiment = "Seimbang"
 
                 # Bagi layout menjadi tiga kolom
-                col1, col2, col3 = st.columns(3)
+                col1, col2 = st.columns(2)
                 
                 with col1:
                     st.metric(
                         label="Total Komentar Dianalisis",
-                        value=f"{total_data}"
+                        value=f"{total_data} komentar"
                     )
                 
                 with col2:
@@ -127,10 +127,6 @@ if uploaded_file is not None:
                         value=dominant_sentiment
                     )
                     
-                with col3:
-                    # Kolom ketiga bisa dikosongkan atau diisi metrik lain jika ada
-                    # Misalnya, metrik netral jika ada.
-                    st.write("") # Dikosongkan agar rapi
                 
                 st.markdown("<br>", unsafe_allow_html=True) # Memberi sedikit spasi
                 
@@ -141,14 +137,14 @@ if uploaded_file is not None:
                     st.metric(
                         label="🟢 Sentimen Positif",
                         value=positive_count,
-                        delta=f"{positive_percentage:.1f}% dari total"
+                        delta=f"{positive_percentage:}% dari total"
                     )
                 
                 with col_neg:
                     st.metric(
                         label="🔴 Sentimen Negatif",
                         value=negative_count,
-                        delta=f"{negative_percentage:.1f}% dari total"
+                        delta=f"{negative_percentage:}% dari total"
                     )
                 
                 # Anda bisa melanjutkan dengan kode untuk visualisasi lainnya di bawah ini
