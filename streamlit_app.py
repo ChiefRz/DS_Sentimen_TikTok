@@ -107,7 +107,6 @@ if uploaded_file is not None:
                         value=dominant_sentiment
                     )
                     
-                st.markdown("---")
                 col_pos, col_neg = st.columns(2)
                 with col_pos:
                     st.metric(
