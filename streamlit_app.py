@@ -9,15 +9,6 @@ from wordcloud import WordCloud
 from nltk.corpus import stopwords
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
-# =================================================================================
-# Tahap 8: Persiapan dan Fungsi Database
-# =================================================================================
-
-
-# =================================================================================
-# Tahap 10: Logika Backend (Model & Preprocessing)
-# =================================================================================
-
 @st.cache_resource
 def load_model_and_vectorizer():
     """Memuat model SVM dan TF-IDF Vectorizer."""
@@ -28,16 +19,6 @@ def load_model_and_vectorizer():
     except FileNotFoundError:
         st.error("File 'model_svm1.joblib' atau 'vectorizer1.joblib' tidak ditemukan. Pastikan file berada di folder yang sama.")
         st.stop()
-
-# Inisialisasi stemmer dan stopwords di luar fungsi agar efisien
-try:
-    stopwords.words('indonesian')
-except LookupError:
-    nltk.download('stopwords')
-
-factory = StemmerFactory()
-stemmer = factory.create_stemmer()
-list_stopwords = set(stopwords.words('indonesian'))
 
 def preprocess_text(text):
     """Membersihkan dan menstandarisasi teks input."""
@@ -50,12 +31,15 @@ def preprocess_text(text):
     tokens = [stemmer.stem(word) for word in tokens]
     return " ".join(tokens)
 
-# Memuat model di awal
-model, vectorizer = load_model_and_vectorizer()
+try:
+    stopwords.words('indonesian')
+except LookupError:
+    nltk.download('stopwords')
 
-# =================================================================================
-# Tahap 9 & 11: Antarmuka (UI) dan Visualisasi
-# =================================================================================
+factory = StemmerFactory()
+stemmer = factory.create_stemmer()
+list_stopwords = set(stopwords.words('indonesian'))
+model, vectorizer = load_model_and_vectorizer()
 
 st.set_page_config(page_title="Analisis Sentimen SVM", layout="wide")
 st.title("Aplikasi Analisis Sentimen Menggunakan SVM")
@@ -79,7 +63,6 @@ if uploaded_file is not None:
 
         if analyze_button:
             with st.spinner('Sedang menganalisis data... Proses ini mungkin memakan waktu beberapa saat.'):
-                # Tahap 10: Proses Backend
                 df_processed = df_input.copy()
                 df_processed.dropna(subset=[text_column], inplace=True) # Hapus baris kosong
                 df_processed['text_cleaned'] = df_processed[text_column].apply(preprocess_text)
@@ -87,7 +70,6 @@ if uploaded_file is not None:
                 predictions = model.predict(features)
                 df_processed['prediksi_sentimen'] = predictions
                 
-                # Tahap 11: Visualisasi
                 st.markdown("---")
                 st.header("📊 Hasil Analisis")
                 st.subheader("Visualisasi Ringkasan Utama")
@@ -112,9 +94,7 @@ if uploaded_file is not None:
                 else:
                     dominant_sentiment = "Seimbang"
 
-                # Bagi layout menjadi tiga kolom
                 col1, col2 = st.columns(2)
-                
                 with col1:
                     st.metric(
                         label="Total Komentar Dianalisis",
@@ -127,12 +107,8 @@ if uploaded_file is not None:
                         value=dominant_sentiment
                     )
                     
-                
-                st.markdown("<br>", unsafe_allow_html=True) # Memberi sedikit spasi
-                
-                # Tampilkan rincian jumlah dan persentase dalam dua kolom terpisah
+                st.markdown("---")
                 col_pos, col_neg = st.columns(2)
-                
                 with col_pos:
                     st.metric(
                         label="🟢 Sentimen Positif",
@@ -146,15 +122,12 @@ if uploaded_file is not None:
                         value=negative_count,
                         delta=f"{negative_percentage:}% dari total"
                     )
-
+                    
                 st.markdown("---")
-                
-                col1, col2 = st.columns(2) # Membuat 2 kolom dengan rasio lebar 1:2
-                # 1. Filter data berdasarkan sentimen dari kolom 'text_cleaned'
+                col1, col2 = st.columns(2)
                 positive_text = df_processed[df_processed['prediksi_sentimen'] == 'positif']['text_cleaned']
                 negative_text = df_processed[df_processed['prediksi_sentimen'] == 'negatif']['text_cleaned']
 
-                # 3. Buat word cloud untuk sentimen positif
                 with col1:
                     st.subheader("Kata Kunci Utama")
                     st.markdown("##### 🟢 Kata Kunci Positif")
@@ -166,7 +139,6 @@ if uploaded_file is not None:
                     else:
                         st.info("Tidak ada kata kunci positif yang ditemukan untuk divisualisasikan.")
 
-                    # 4. Buat word cloud untuk sentimen negatif
                     st.markdown("##### 🔴 Kata Kunci Negatif")
                     full_negative_text = " ".join(text for text in negative_text)
 
@@ -179,47 +151,36 @@ if uploaded_file is not None:
                 with col2:
                     st.subheader("Distribusi Sentimen")
                     
-                    # Membuat Donut Chart dengan Plotly
                     fig = px.pie(
                         sentimen_df,
                         names='sentimen',
                         values='jumlah',
-                        hole=0.5, # Ini yang membuat pie chart menjadi donut char
+                        hole=0.5, 
                         color='sentimen',
                         color_discrete_map={
-                            'positif': '#4CAF50', # Hijau
-                            'negatif': '#F44336', # Merah
+                            'positif': '#4CAF50',
+                            'negatif': '#F44336',
                         }
                     )
                     
-                    # Menyesuaikan tampilan chart
                     fig.update_traces(
                         textposition='inside', 
                         textinfo='percent+label',
-                        marker=dict(line=dict(color='#FFFFFF', width=2)) # Garis putih antar segmen
+                        marker=dict(line=dict(color='#FFFFFF', width=2))
                     )
                     
                     fig.update_layout(
-                        showlegend=False, # Menyembunyikan legenda karena info sudah ada di chart
-                        margin=dict(t=0, b=0, l=0, r=0) # Menghilangkan margin berlebih
+                        showlegend=False,
+                        margin=dict(t=0, b=0, l=0, r=0)
                     )
                     
-                    # Menampilkan chart di Streamlit
                     st.plotly_chart(fig, use_container_width=True)
 
-                # =================================================================
-                # Tahap 11.3: Menampilkan Contoh Komentar Aktual
-                # =================================================================
                 st.markdown("---")
                 st.header("Contoh Komentar Aktual")
-
-                # Jumlah komentar yang ingin ditampilkan per kategori
                 n_samples = 3 
-
-                # Membuat tiga kolom
                 col1_comment, col2_comment = st.columns(2)
 
-                # --- Kolom Komentar Positif ---
                 with col1_comment:
                     st.subheader("🟢 Positif")
                     positive_comments = df_processed[df_processed['prediksi_sentimen'] == 'positif']
@@ -227,17 +188,14 @@ if uploaded_file is not None:
                     if positive_comments.empty:
                         st.info("Tidak ada komentar positif yang ditemukan.")
                     else:
-                        # Ambil sampel acak, jika jumlah data kurang, ambil semuanya
                         try:
                             samples = positive_comments.sample(n_samples)
                         except ValueError:
                             samples = positive_comments
                         
-                        # Tampilkan setiap sampel menggunakan st.success
                         for _, row in samples.iterrows():
                             st.success(f"_{row[text_column]}_")
 
-                # --- Kolom Komentar Negatif ---
                 with col2_comment:
                     st.subheader("🔴 Negatif")
                     negative_comments = df_processed[df_processed['prediksi_sentimen'] == 'negatif']
@@ -252,46 +210,35 @@ if uploaded_file is not None:
 
                         for _, row in samples.iterrows():
                             st.error(f"_{row[text_column]}_")
-                # =================================================================
-                # AKHIR DARI BLOK CONTOH KOMENTAR
-                # =================================================================
-                # =================================================================
-                # Tahap 11.4: Menampilkan Wawasan dan Kesimpulan
-                # =================================================================
+                            
                 st.markdown("---")
                 st.header("Wawasan & Kesimpulan")
 
-                # Pastikan sentimen_counts tidak kosong
                 if not sentimen_counts.empty:
-                    # 1. Cari sentimen yang paling dominan (total_data sudah dihitung sebelumnya)
                     dominant_sentiment = sentimen_counts.idxmax()
                     dominant_count = sentimen_counts.max()
                     dominant_percentage = (dominant_count / total_data) * 100
 
-                    # 2. Tentukan kalimat berdasarkan sentimen dominan
                     if dominant_sentiment == 'positif':
                         tendency_text = "cenderung **positif**"
                     else: 
                         tendency_text = "cenderung **negatif**"
 
-                    # 3. Rakit kalimat kesimpulan secara dinamis
                     insight_text = f"""
                     Dari total **{total_data} komentar** yang dianalisis, respon audiens secara umum {tendency_text}. 
 
                     Sentimen **{dominant_sentiment.capitalize()}** menjadi yang paling menonjol, mencakup **{dominant_percentage:.1f}%** dari keseluruhan tanggapan.
                     """
 
-                    # 4. Tampilkan kesimpulan dalam kotak info
                     st.info(insight_text)
 
                 else:
                     st.warning("Tidak ada data yang dapat disimpulkan.")
-                # =================================================================
-                # AKHIR DARI BLOK KESIMPULAN
-                # =================================================================
+
                 st.markdown("---")
                 st.subheader("Tabel Data dengan Hasil Prediksi Sentimen")
                 st.dataframe(df_processed[[text_column, 'prediksi_sentimen']])
+                
     except Exception as e:
         st.error(f"Terjadi kesalahan: {e}")
 else:
