@@ -211,7 +211,7 @@ if uploaded_file is not None:
                 # Tahap 11.3: Menampilkan Contoh Komentar Aktual
                 # =================================================================
                 st.markdown("---")
-                st.header("💬 Contoh Komentar Aktual")
+                st.header("Contoh Komentar Aktual")
 
                 # Jumlah komentar yang ingin ditampilkan per kategori
                 n_samples = 3 
@@ -259,7 +259,7 @@ if uploaded_file is not None:
                 # Tahap 11.4: Menampilkan Wawasan dan Kesimpulan
                 # =================================================================
                 st.markdown("---")
-                st.header("💡 Wawasan & Kesimpulan")
+                st.header("Wawasan & Kesimpulan")
 
                 # Pastikan sentimen_counts tidak kosong
                 if not sentimen_counts.empty:
@@ -271,14 +271,12 @@ if uploaded_file is not None:
                     # 2. Tentukan kalimat berdasarkan sentimen dominan
                     if dominant_sentiment == 'positif':
                         tendency_text = "cenderung **positif**"
-                        icon = "✅"
                     else: 
                         tendency_text = "cenderung **negatif**"
-                        icon = "❌"
 
                     # 3. Rakit kalimat kesimpulan secara dinamis
                     insight_text = f"""
-                    {icon} Dari total **{total_data} komentar** yang dianalisis, respon audiens secara umum {tendency_text}. 
+                    Dari total **{total_data} komentar** yang dianalisis, respon audiens secara umum {tendency_text}. 
 
                     Sentimen **{dominant_sentiment.capitalize()}** menjadi yang paling menonjol, mencakup **{dominant_percentage:.1f}%** dari keseluruhan tanggapan.
                     """
@@ -300,4 +298,3 @@ else:
     st.warning("Silakan unggah file CSV melalui sidebar untuk memulai.")
 
 st.markdown("---")
-st.write("Dibuat menggunakan Streamlit.")
