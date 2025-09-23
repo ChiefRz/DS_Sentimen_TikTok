@@ -160,7 +160,7 @@ if uploaded_file is not None:
                     full_positive_text = " ".join(text for text in positive_text)
 
                     if full_positive_text.strip():
-                        wordcloud_pos = WordCloud(width=800, height=400, background_color="white", colormap='Greens').generate(full_positive_text)
+                        wordcloud_pos = WordCloud(width=600, height=200, background_color="white", colormap='Greens').generate(full_positive_text)
                         st.image(wordcloud_pos.to_array(), use_container_width=True)
                     else:
                         st.info("Tidak ada kata kunci positif yang ditemukan untuk divisualisasikan.")
@@ -170,7 +170,7 @@ if uploaded_file is not None:
                     full_negative_text = " ".join(text for text in negative_text)
 
                     if full_negative_text.strip():
-                        wordcloud_neg = WordCloud(width=800, height=400, background_color="white", colormap='Reds').generate(full_negative_text)
+                        wordcloud_neg = WordCloud(width=600, height=200, background_color="white", colormap='Reds').generate(full_negative_text)
                         st.image(wordcloud_neg.to_array(), use_container_width=True)
                     else:
                         st.info("Tidak ada kata kunci negatif yang ditemukan untuk divisualisasikan.")
