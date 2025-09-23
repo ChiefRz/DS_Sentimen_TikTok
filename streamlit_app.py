@@ -156,7 +156,8 @@ if uploaded_file is not None:
 
                 # 3. Buat word cloud untuk sentimen positif
                 with col1:
-                    st.subheader("🟢 Kata Kunci Positif")
+                    st.subheader("Kata Kunci Utama")
+                    st.markdown("##### 🟢 Kata Kunci Positif")
                     full_positive_text = " ".join(text for text in positive_text)
 
                     if full_positive_text.strip():
@@ -166,7 +167,7 @@ if uploaded_file is not None:
                         st.info("Tidak ada kata kunci positif yang ditemukan untuk divisualisasikan.")
 
                     # 4. Buat word cloud untuk sentimen negatif
-                    st.subheader("🔴 Kata Kunci Negatif")
+                    st.markdown("##### 🔴 Kata Kunci Negatif")
                     full_negative_text = " ".join(text for text in negative_text)
 
                     if full_negative_text.strip():
@@ -176,7 +177,7 @@ if uploaded_file is not None:
                         st.info("Tidak ada kata kunci negatif yang ditemukan untuk divisualisasikan.")
                         
                 with col2:
-                    st.markdown("#### Distribusi Sentimen")
+                    st.subheader("Distribusi Sentimen")
                     
                     # Membuat Donut Chart dengan Plotly
                     fig = px.pie(
@@ -205,50 +206,6 @@ if uploaded_file is not None:
                     
                     # Menampilkan chart di Streamlit
                     st.plotly_chart(fig, use_container_width=True)
-                    
-                # Anda bisa melanjutkan dengan kode untuk visualisasi lainnya di bawah ini
-                st.markdown("---")
-                
-                col1, col2 = st.columns([2, 3]) # Membuat 2 kolom dengan rasio lebar 1:2
-                with col1:
-                    st.markdown("#### Metrik Utama")
-                    st.metric(label="Total Data Dianalisis", value=f"{total_data} Komentar")
-                    # Menampilkan persentase untuk setiap sentimen
-                    for sentimen in sentimen_df['sentimen']:
-                        count = sentimen_df[sentimen_df['sentimen'] == sentimen]['jumlah'].iloc[0]
-                        percentage = (count / total_data) * 100
-                        st.write(f"**{sentimen.capitalize()}:** {count} komentar ({percentage:.1f}%)")
-                        
-                with col2:
-                    st.markdown("#### Distribusi Sentimen")
-                    
-                    # Membuat Donut Chart dengan Plotly
-                    fig = px.pie(
-                        sentimen_df,
-                        names='sentimen',
-                        values='jumlah',
-                        hole=0.5, # Ini yang membuat pie chart menjadi donut char
-                        color='sentimen',
-                        color_discrete_map={
-                            'positif': '#4CAF50', # Hijau
-                            'negatif': '#F44336', # Merah
-                        }
-                    )
-                    
-                    # Menyesuaikan tampilan chart
-                    fig.update_traces(
-                        textposition='inside', 
-                        textinfo='percent+label',
-                        marker=dict(line=dict(color='#FFFFFF', width=2)) # Garis putih antar segmen
-                    )
-                    
-                    fig.update_layout(
-                        showlegend=False, # Menyembunyikan legenda karena info sudah ada di chart
-                        margin=dict(t=0, b=0, l=0, r=0) # Menghilangkan margin berlebih
-                    )
-                    
-                    # Menampilkan chart di Streamlit
-                    st.plotly_chart(fig, use_container_width=True)    
 
                 # =================================================================
                 # Tahap 11.3: Menampilkan Contoh Komentar Aktual
