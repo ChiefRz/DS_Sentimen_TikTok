@@ -94,7 +94,65 @@ if uploaded_file is not None:
                 total_data = len(df_processed)
                 sentimen_counts = df_processed['prediksi_sentimen'].value_counts()
                 sentimen_df = sentimen_counts.reset_index()
-                sentimen_df.columns = ['sentimen', 'jumlah'] 
+                sentimen_df.columns = ['sentimen', 'jumlah']
+                positive_count = int(sentimen_counts.get('positif', 0))
+                negative_count = int(sentimen_counts.get('negatif', 0))
+
+                if total_data > 0:
+                    positive_percentage = (positive_count / total_data) * 100
+                    negative_percentage = (negative_count / total_data) * 100
+                else:
+                    positive_percentage = 0
+                    negative_percentage = 0
+                
+                if positive_count > negative_count:
+                    dominant_sentiment = "Cenderung Positif ✅"
+                elif negative_count > positive_count:
+                    dominant_sentiment = "Cenderung Negatif ❌"
+                else:
+                    dominant_sentiment = "Seimbang ➖"
+
+                # Bagi layout menjadi tiga kolom
+                col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    st.metric(
+                        label="Total Komentar Dianalisis",
+                        value=f"{total_data}"
+                    )
+                
+                with col2:
+                    st.metric(
+                        label="Sentimen Umum",
+                        value=dominant_sentiment
+                    )
+                    
+                with col3:
+                    # Kolom ketiga bisa dikosongkan atau diisi metrik lain jika ada
+                    # Misalnya, metrik netral jika ada.
+                    st.write("") # Dikosongkan agar rapi
+                
+                st.markdown("<br>", unsafe_allow_html=True) # Memberi sedikit spasi
+                
+                # Tampilkan rincian jumlah dan persentase dalam dua kolom terpisah
+                col_pos, col_neg = st.columns(2)
+                
+                with col_pos:
+                    st.metric(
+                        label="🟢 Sentimen Positif",
+                        value=positive_count,
+                        delta=f"{positive_percentage:.1f}% dari total"
+                    )
+                
+                with col_neg:
+                    st.metric(
+                        label="🔴 Sentimen Negatif",
+                        value=negative_count,
+                        delta=f"{negative_percentage:.1f}% dari total"
+                    )
+                
+                # Anda bisa melanjutkan dengan kode untuk visualisasi lainnya di bawah ini
+                st.markdown("---")
                 
                 col1, col2 = st.columns([2, 3]) # Membuat 2 kolom dengan rasio lebar 1:2
                 with col1:
