@@ -146,7 +146,66 @@ if uploaded_file is not None:
                         value=negative_count,
                         delta=f"{negative_percentage:}% dari total"
                     )
+
+                st.markdown("---")
                 
+                col1, col2 = st.columns(2) # Membuat 2 kolom dengan rasio lebar 1:2
+                # 1. Filter data berdasarkan sentimen dari kolom 'text_cleaned'
+                positive_text = df_processed[df_processed['prediksi_sentimen'] == 'positif']['text_cleaned']
+                negative_text = df_processed[df_processed['prediksi_sentimen'] == 'negatif']['text_cleaned']
+
+                # 3. Buat word cloud untuk sentimen positif
+                with col1:
+                    st.subheader("🟢 Kata Kunci Positif")
+                    full_positive_text = " ".join(text for text in positive_text)
+
+                    if full_positive_text.strip():
+                        wordcloud_pos = WordCloud(width=800, height=400, background_color="white", colormap='Greens').generate(full_positive_text)
+                        st.image(wordcloud_pos.to_array(), use_container_width=True)
+                    else:
+                        st.info("Tidak ada kata kunci positif yang ditemukan untuk divisualisasikan.")
+
+                    # 4. Buat word cloud untuk sentimen negatif
+                    st.subheader("🔴 Kata Kunci Negatif")
+                    full_negative_text = " ".join(text for text in negative_text)
+
+                    if full_negative_text.strip():
+                        wordcloud_neg = WordCloud(width=800, height=400, background_color="white", colormap='Reds').generate(full_negative_text)
+                        st.image(wordcloud_neg.to_array(), use_container_width=True)
+                    else:
+                        st.info("Tidak ada kata kunci negatif yang ditemukan untuk divisualisasikan.")
+                        
+                with col2:
+                    st.markdown("#### Distribusi Sentimen")
+                    
+                    # Membuat Donut Chart dengan Plotly
+                    fig = px.pie(
+                        sentimen_df,
+                        names='sentimen',
+                        values='jumlah',
+                        hole=0.5, # Ini yang membuat pie chart menjadi donut char
+                        color='sentimen',
+                        color_discrete_map={
+                            'positif': '#4CAF50', # Hijau
+                            'negatif': '#F44336', # Merah
+                        }
+                    )
+                    
+                    # Menyesuaikan tampilan chart
+                    fig.update_traces(
+                        textposition='inside', 
+                        textinfo='percent+label',
+                        marker=dict(line=dict(color='#FFFFFF', width=2)) # Garis putih antar segmen
+                    )
+                    
+                    fig.update_layout(
+                        showlegend=False, # Menyembunyikan legenda karena info sudah ada di chart
+                        margin=dict(t=0, b=0, l=0, r=0) # Menghilangkan margin berlebih
+                    )
+                    
+                    # Menampilkan chart di Streamlit
+                    st.plotly_chart(fig, use_container_width=True)
+                    
                 # Anda bisa melanjutkan dengan kode untuk visualisasi lainnya di bawah ini
                 st.markdown("---")
                 
