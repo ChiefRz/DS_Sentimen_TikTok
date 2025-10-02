@@ -47,7 +47,7 @@ st.write("Unggah file CSV Anda, dan aplikasi ini akan memprediksi sentimen dari 
 st.markdown("---")
 
 with st.sidebar:
-    st.image("cropped-DUSEM-LOGO-512x512-1.png", use_container_width=True) 
+    st.image("cropped-DUSEM-LOGO-512x512-12.png", use_container_width=True) 
     st.header("Upload Data Anda")
     uploaded_file = st.file_uploader("Pilih file CSV...", type=["csv"])
 
