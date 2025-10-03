@@ -14,7 +14,7 @@ from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 ASPEK = {
     "tiket": ["tiket", "harga", "booking", "presale", "ots", "mahal", "murah"],
     "guest_star": ["guest star", "bintang tamu", "pengisi acara", "penampil", "band", "artis", "ci shani", "shani", "zee"],
-    "venue": ["venue", "lokasi", "tempat", "panggung", "stage", "semarang", "Semarang", "Bawen"],
+    "venue": ["venue", "lokasi", "tempat", "panggung", "stage", "semarang", "Semarang", "Bawen"]
 }
 
 def extract_aspects(text, aspect_keywords):
