@@ -10,6 +10,23 @@ from nltk.corpus import stopwords
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
 @st.cache_resource
+# Definisikan kata kunci untuk setiap aspek
+ASPEK = {
+    "tiket": ["tiket", "harga", "booking", "presale", "ots", "mahal", "murah"],
+    "guest_star": ["guest star", "bintang tamu", "pengisi acara", "penampil", "band", "artis", "ci shani", "shani", "zee"],
+    "venue": ["venue", "lokasi", "tempat", "panggung", "stage", "semarang", "Semarang", "Bawen"],
+}
+
+def extract_aspects(text, aspect_keywords):
+    """Mengekstrak aspek yang ditemukan dalam teks."""
+    found_aspects = []
+    for aspect, keywords in aspect_keywords.items():
+        for keyword in keywords:
+            if keyword in text:
+                found_aspects.append(aspect)
+                break # Pindah ke aspek selanjutnya jika satu kata kunci sudah ditemukan
+    return found_aspects
+
 def load_model_and_vectorizer():
     """Memuat model SVM dan TF-IDF Vectorizer."""
     try:
@@ -71,8 +88,52 @@ if uploaded_file is not None:
                 predictions = model.predict(features)
                 df_processed['prediksi_sentimen'] = predictions
                 
+                # --- TAMBAHKAN LOGIKA ASPEK DI SINI ---
+                df_processed['aspek_ditemukan'] = df_processed['text_cleaned'].apply(lambda x: extract_aspects(x, ASPEK))
+                
+                # Buat DataFrame baru untuk analisis aspek
+                aspek_sentimen_list = []
+                for index, row in df_processed.iterrows():
+                    sentimen = row['prediksi_sentimen']
+                    for aspek in row['aspek_ditemukan']:
+                        aspek_sentimen_list.append({'aspek': aspek, 'sentimen': sentimen})
+                
+                df_aspek = pd.DataFrame(aspek_sentimen_list)
+                
+                # Hitung jumlah sentimen untuk setiap aspek
+                aspek_summary = df_aspek.groupby(['aspek', 'sentimen']).size().reset_index(name='jumlah')
+                # --- SELESAI MENAMBAHKAN LOGIKA ASPEK ---
+                
                 st.markdown("---")
                 st.header("📊 Hasil Analisis")
+                # ... di bawah bagian "Hasil Analisis"
+
+                # --- TAMBAHKAN VISUALISASI ASPEK DI SINI ---
+                st.markdown("---")
+                st.header("🔍 Analisis Sentimen Berbasis Aspek")
+                
+                if not aspek_summary.empty:
+                    st.subheader("Distribusi Sentimen per Aspek Spesifik")
+                    
+                    fig_aspek = px.bar(
+                        aspek_summary,
+                        x='aspek',
+                        y='jumlah',
+                        color='sentimen',
+                        barmode='group',
+                        title="Jumlah Sentimen Positif & Negatif untuk Setiap Aspek",
+                        labels={'aspek': 'Aspek', 'jumlah': 'Jumlah Komentar', 'sentimen': 'Sentimen'},
+                        color_discrete_map={
+                            'positif': '#4CAF50',
+                            'negatif': '#F44336'
+                        }
+                    )
+                    fig_aspek.update_layout(xaxis_title="Aspek", yaxis_title="Jumlah Komentar")
+                    st.plotly_chart(fig_aspek, use_container_width=True)
+                else:
+                    st.info("Tidak ditemukan aspek spesifik (seperti tiket atau guest star) dalam data komentar.")
+                
+                # --- SELESAI MENAMBAHKAN VISUALISASI ASPEK ---
                 st.subheader("Visualisasi Ringkasan Utama")
                 total_data = len(df_processed)
                 sentimen_counts = df_processed['prediksi_sentimen'].value_counts()
