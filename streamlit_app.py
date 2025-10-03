@@ -302,7 +302,7 @@ if uploaded_file is not None:
                 
                 st.markdown("---")
                 st.subheader("Tabel Data dengan Hasil Prediksi Sentimen")
-                st.dataframe(aspek_summary)
+                st.dataframe(df_aspek)
     except Exception as e:
         st.error(f"Terjadi kesalahan: {e}")
 else:
