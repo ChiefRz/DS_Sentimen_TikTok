@@ -95,14 +95,29 @@ if uploaded_file is not None:
                 aspek_sentimen_list = []
                 for index, row in df_processed.iterrows():
                     sentimen = row['prediksi_sentimen']
-                    for aspek in row['aspek_ditemukan']:
-                        aspek_sentimen_list.append({'aspek': aspek, 'sentimen': sentimen})
+                    aspek_list = row['aspek_ditemukan']
+                    # Ambil teks asli dari kolom yang dipilih pengguna
+                    teks_asli = row[text_column] 
+
+                    # Jika tidak ada aspek spesifik yang ditemukan, beri label 'general'
+                    if not aspek_list:
+                        aspek_sentimen_list.append({
+                            'aspek': 'general', 
+                            'sentimen': sentimen, 
+                            'teks_asli': teks_asli
+                        })
+                    else:
+                        # Jika ada aspek, tambahkan satu baris untuk setiap aspek yang ditemukan
+                        for aspek in aspek_list:
+                            aspek_sentimen_list.append({
+                                'aspek': aspek, 
+                                'sentimen': sentimen, 
+                                'teks_asli': teks_asli
+                            })
                 
                 df_aspek = pd.DataFrame(aspek_sentimen_list)
                 
-                # Hitung jumlah sentimen untuk setiap aspek
                 aspek_summary = df_aspek.groupby(['aspek', 'sentimen']).size().reset_index(name='jumlah')
-                # --- SELESAI MENAMBAHKAN LOGIKA ASPEK ---
                 
                 st.markdown("---")
                 st.header("📊 Hasil Analisis")
