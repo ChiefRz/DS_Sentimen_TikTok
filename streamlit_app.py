@@ -300,6 +300,9 @@ if uploaded_file is not None:
                 st.subheader("Tabel Data dengan Hasil Prediksi Sentimen")
                 st.dataframe(df_processed[[text_column, 'prediksi_sentimen']])
                 
+                st.markdown("---")
+                st.subheader("Tabel Data dengan Hasil Prediksi Sentimen")
+                st.dataframe(aspek_summary)
     except Exception as e:
         st.error(f"Terjadi kesalahan: {e}")
 else:
