@@ -9,13 +9,13 @@ from wordcloud import WordCloud
 from nltk.corpus import stopwords
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
-@st.cache_resource
-# Definisikan kata kunci untuk setiap aspek
 ASPEK = {
     "tiket": ["tiket", "harga", "booking", "presale", "ots", "mahal", "murah"],
     "guest_star": ["guest star", "bintang tamu", "pengisi acara", "penampil", "band", "artis", "ci shani", "shani", "zee"],
     "venue": ["venue", "lokasi", "tempat", "panggung", "stage", "semarang", "Semarang", "Bawen"]
 }
+
+@st.cache_resource
 
 def extract_aspects(text, aspect_keywords):
     """Mengekstrak aspek yang ditemukan dalam teks."""
