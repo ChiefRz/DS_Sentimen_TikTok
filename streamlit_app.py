@@ -11,8 +11,8 @@ from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
 ASPEK = {
     "Tiket": ["tiket", "harga", "booking", "presale", "ots", "mahal", "murah", "dapat", "habis", "sold out", "sold", "telat", "kalah"],
-    "Guest_star": ["guest star", "bintang tamu", "pengisi acara", "penampil", "band", "artis", "jkt48", "jkt", "oshi", "marsha", "ci shani", "shani", "zee", "amanda", "freya", "adel", "],
-    "Lokasi": ["venue", "lokasi", "tempat", "panggung", "stage", "semilir", "jawa", "jawa tengah", "semarang", "Semarang", "Bawen", "ungaran", "deket", "dekat", "jauh", "magelang", "wonosobo", "temanggung", ]
+    "Guest_star": ["guest star", "bintang tamu", "pengisi acara", "penampil", "band", "artis", "jkt48", "jkt", "oshi", "marsha", "ci shani", "shani", "zee", "amanda", "freya", "adel"],
+    "Lokasi": ["venue", "lokasi", "tempat", "panggung", "stage", "semilir", "jawa", "jawa tengah", "semarang", "Semarang", "Bawen", "ungaran", "deket", "dekat", "jauh", "magelang", "wonosobo", "temanggung"]
 }
 
 @st.cache_resource
