@@ -123,30 +123,7 @@ if uploaded_file is not None:
                 st.header("📊 Hasil Analisis")
                 # ... di bawah bagian "Hasil Analisis"
 
-                # --- TAMBAHKAN VISUALISASI ASPEK DI SINI ---
-                st.markdown("---")
-                st.header("🔍 Analisis Sentimen Berbasis Aspek")
                 
-                if not aspek_summary.empty:
-                    st.subheader("Distribusi Sentimen per Aspek Spesifik")
-                    
-                    fig_aspek = px.bar(
-                        aspek_summary,
-                        x='aspek',
-                        y='jumlah',
-                        color='sentimen',
-                        barmode='group',
-                        title="Jumlah Sentimen Positif & Negatif untuk Setiap Aspek",
-                        labels={'aspek': 'Aspek', 'jumlah': 'Jumlah Komentar', 'sentimen': 'Sentimen'},
-                        color_discrete_map={
-                            'positif': '#4CAF50',
-                            'negatif': '#F44336'
-                        }
-                    )
-                    fig_aspek.update_layout(xaxis_title="Aspek", yaxis_title="Jumlah Komentar")
-                    st.plotly_chart(fig_aspek, use_container_width=True)
-                else:
-                    st.info("Tidak ditemukan aspek spesifik (seperti tiket atau guest star) dalam data komentar.")
                 
                 # --- SELESAI MENAMBAHKAN VISUALISASI ASPEK ---
                 st.subheader("Visualisasi Ringkasan Utama")
@@ -286,6 +263,29 @@ if uploaded_file is not None:
 
                         for _, row in samples.iterrows():
                             st.error(f"_{row[text_column]}_")
+
+                # --- TAMBAHKAN VISUALISASI ASPEK DI SINI ---
+                st.markdown("---")
+                if not aspek_summary.empty:
+                    st.subheader("Distribusi Sentimen per Aspek Spesifik")
+                    
+                    fig_aspek = px.bar(
+                        aspek_summary,
+                        x='aspek',
+                        y='jumlah',
+                        color='sentimen',
+                        barmode='group',
+                        title="Jumlah Sentimen Positif & Negatif untuk Setiap Aspek",
+                        labels={'aspek': 'Aspek', 'jumlah': 'Jumlah Komentar', 'sentimen': 'Sentimen'},
+                        color_discrete_map={
+                            'positif': '#4CAF50',
+                            'negatif': '#F44336'
+                        }
+                    )
+                    fig_aspek.update_layout(xaxis_title="Aspek", yaxis_title="Jumlah Komentar")
+                    st.plotly_chart(fig_aspek, use_container_width=True)
+                else:
+                    st.info("Tidak ditemukan aspek spesifik (seperti tiket atau guest star) dalam data komentar.")
                             
                 st.markdown("---")
                 st.header("Wawasan & Kesimpulan")
@@ -310,14 +310,11 @@ if uploaded_file is not None:
 
                 else:
                     st.warning("Tidak ada data yang dapat disimpulkan.")
-
-                st.markdown("---")
-                st.subheader("Tabel Data dengan Hasil Prediksi Sentimen")
-                st.dataframe(df_processed[[text_column, 'prediksi_sentimen']])
                 
                 st.markdown("---")
                 st.subheader("Tabel Data dengan Hasil Prediksi Sentimen")
                 st.dataframe(df_aspek)
+                
     except Exception as e:
         st.error(f"Terjadi kesalahan: {e}")
 else:
