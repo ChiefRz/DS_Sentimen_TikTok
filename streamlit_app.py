@@ -122,10 +122,6 @@ if uploaded_file is not None:
                 st.markdown("---")
                 st.header("📊 Hasil Analisis")
                 # ... di bawah bagian "Hasil Analisis"
-
-                
-                
-                # --- SELESAI MENAMBAHKAN VISUALISASI ASPEK ---
                 st.subheader("Visualisasi Ringkasan Utama")
                 total_data = len(df_processed)
                 sentimen_counts = df_processed['prediksi_sentimen'].value_counts()
@@ -165,15 +161,13 @@ if uploaded_file is not None:
                 with col_pos:
                     st.metric(
                         label="🟢 Sentimen Positif",
-                        value=positive_count,
-                        delta=f"{positive_percentage:}% dari total"
+                        value=positive_count
                     )
                 
                 with col_neg:
                     st.metric(
                         label="🔴 Sentimen Negatif",
-                        value=negative_count,
-                        delta=f"{negative_percentage:}% dari total"
+                        value=negative_count
                     )
                     
                 st.markdown("---")
