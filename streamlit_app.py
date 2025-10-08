@@ -10,9 +10,9 @@ from nltk.corpus import stopwords
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
 ASPEK = {
-    "tiket": ["tiket", "harga", "booking", "presale", "ots", "mahal", "murah"],
-    "guest_star": ["guest star", "bintang tamu", "pengisi acara", "penampil", "band", "artis", "ci shani", "shani", "zee"],
-    "venue": ["venue", "lokasi", "tempat", "panggung", "stage", "semarang", "Semarang", "Bawen"]
+    "Tiket": ["tiket", "harga", "booking", "presale", "ots", "mahal", "murah", "dapat", "habis", "sold out", "sold", "telat", "kalah"],
+    "Guest_star": ["guest star", "bintang tamu", "pengisi acara", "penampil", "band", "artis", "jkt48", "jkt", "oshi", "marsha", "ci shani", "shani", "zee", "amanda", "freya", "adel", "],
+    "Lokasi": ["venue", "lokasi", "tempat", "panggung", "stage", "semilir", "jawa", "jawa tengah", "semarang", "Semarang", "Bawen", "ungaran", "deket", "dekat", "jauh", "magelang", "wonosobo", "temanggung", ]
 }
 
 @st.cache_resource
@@ -223,6 +223,29 @@ if uploaded_file is not None:
                     
                     st.plotly_chart(fig, use_container_width=True)
 
+                # --- TAMBAHKAN VISUALISASI ASPEK DI SINI ---
+                st.markdown("---")
+                if not aspek_summary.empty:
+                    st.subheader("Distribusi Sentimen per Aspek Spesifik")
+                    
+                    fig_aspek = px.bar(
+                        aspek_summary,
+                        x='aspek',
+                        y='jumlah',
+                        color='sentimen',
+                        barmode='group',
+                        title="Jumlah Sentimen Positif & Negatif untuk Setiap Aspek",
+                        labels={'aspek': 'Aspek', 'jumlah': 'Jumlah Komentar', 'sentimen': 'Sentimen'},
+                        color_discrete_map={
+                            'positif': '#4CAF50',
+                            'negatif': '#F44336'
+                        }
+                    )
+                    fig_aspek.update_layout(xaxis_title="Aspek", yaxis_title="Jumlah Komentar")
+                    st.plotly_chart(fig_aspek, use_container_width=True)
+                else:
+                    st.info("Tidak ditemukan aspek spesifik (seperti tiket atau guest star) dalam data komentar.")
+                            
                 st.markdown("---")
                 st.header("Contoh Komentar Aktual")
                 n_samples = 3 
@@ -257,29 +280,6 @@ if uploaded_file is not None:
 
                         for _, row in samples.iterrows():
                             st.error(f"_{row[text_column]}_")
-
-                # --- TAMBAHKAN VISUALISASI ASPEK DI SINI ---
-                st.markdown("---")
-                if not aspek_summary.empty:
-                    st.subheader("Distribusi Sentimen per Aspek Spesifik")
-                    
-                    fig_aspek = px.bar(
-                        aspek_summary,
-                        x='aspek',
-                        y='jumlah',
-                        color='sentimen',
-                        barmode='group',
-                        title="Jumlah Sentimen Positif & Negatif untuk Setiap Aspek",
-                        labels={'aspek': 'Aspek', 'jumlah': 'Jumlah Komentar', 'sentimen': 'Sentimen'},
-                        color_discrete_map={
-                            'positif': '#4CAF50',
-                            'negatif': '#F44336'
-                        }
-                    )
-                    fig_aspek.update_layout(xaxis_title="Aspek", yaxis_title="Jumlah Komentar")
-                    st.plotly_chart(fig_aspek, use_container_width=True)
-                else:
-                    st.info("Tidak ditemukan aspek spesifik (seperti tiket atau guest star) dalam data komentar.")
                             
                 st.markdown("---")
                 st.header("Wawasan & Kesimpulan")
