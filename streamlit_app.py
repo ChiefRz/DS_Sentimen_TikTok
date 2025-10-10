@@ -24,7 +24,7 @@ def extract_aspects(text, aspect_keywords):
         for keyword in keywords:
             if keyword in text:
                 found_aspects.append(aspect)
-                break # Pindah ke aspek selanjutnya jika satu kata kunci sudah ditemukan
+                break 
     return found_aspects
 
 def load_model_and_vectorizer():
@@ -39,7 +39,7 @@ def load_model_and_vectorizer():
 
 def preprocess_text(text):
     """Membersihkan dan menstandarisasi teks input."""
-    text = str(text).lower() # Pastikan input adalah string dan lowercased
+    text = str(text).lower()
     text = re.sub(r'http\S+|www\S+|https\S+', '', text, flags=re.MULTILINE)
     text = re.sub(r'\@\w+|\#', '', text)
     text = re.sub(r'[^a-z\s]', '', text)
@@ -82,24 +82,20 @@ if uploaded_file is not None:
         if analyze_button:
             with st.spinner('Sedang menganalisis data... Proses ini mungkin memakan waktu beberapa saat.'):
                 df_processed = df_input.copy()
-                df_processed.dropna(subset=[text_column], inplace=True) # Hapus baris kosong
+                df_processed.dropna(subset=[text_column], inplace=True) 
                 df_processed['text_cleaned'] = df_processed[text_column].apply(preprocess_text)
                 features = vectorizer.transform(df_processed['text_cleaned'])
                 predictions = model.predict(features)
                 df_processed['prediksi_sentimen'] = predictions
                 
-                # --- TAMBAHKAN LOGIKA ASPEK DI SINI ---
                 df_processed['aspek_ditemukan'] = df_processed['text_cleaned'].apply(lambda x: extract_aspects(x, ASPEK))
                 
-                # Buat DataFrame baru untuk analisis aspek
                 aspek_sentimen_list = []
                 for index, row in df_processed.iterrows():
                     sentimen = row['prediksi_sentimen']
                     aspek_list = row['aspek_ditemukan']
-                    # Ambil teks asli dari kolom yang dipilih pengguna
                     teks = row[text_column] 
 
-                    # Jika tidak ada aspek spesifik yang ditemukan, beri label 'general'
                     if not aspek_list:
                         aspek_sentimen_list.append({
                             'teks': teks,
@@ -107,7 +103,6 @@ if uploaded_file is not None:
                             'aspek': 'general'                            
                         })
                     else:
-                        # Jika ada aspek, tambahkan satu baris untuk setiap aspek yang ditemukan
                         for aspek in aspek_list:
                             aspek_sentimen_list.append({
                                 'teks': teks,
@@ -121,7 +116,6 @@ if uploaded_file is not None:
                 
                 st.markdown("---")
                 st.header("📊 Hasil Analisis")
-                # ... di bawah bagian "Hasil Analisis"
                 st.subheader("Visualisasi Ringkasan Utama")
                 total_data = len(df_processed)
                 sentimen_counts = df_processed['prediksi_sentimen'].value_counts()
@@ -223,7 +217,6 @@ if uploaded_file is not None:
                     
                     st.plotly_chart(fig, use_container_width=True)
 
-                # --- TAMBAHKAN VISUALISASI ASPEK DI SINI ---
                 st.markdown("---")
                 if not aspek_summary.empty:
                     st.subheader("Distribusi Sentimen per Aspek Spesifik")
