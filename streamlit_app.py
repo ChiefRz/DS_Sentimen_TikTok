@@ -321,7 +321,8 @@ if uploaded_file is not None:
         st.error(f"Terjadi kesalahan: {e}")
 else:
     st.warning("Silakan unggah file CSV melalui sidebar untuk memulai.")
-    st.info("Silakan unduh file contoh di bawah ini jika Anda belum memiliki data:")
+    st.markdown("---")
+    st.info("Silakan unduh file dibawah untuk panduan Scraping Data")
     
     # Ganti 'contoh_data.csv' dengan nama file Anda yang ada di repository
     file_path = 'Panduan Data Scraping.pdf' 
@@ -330,7 +331,7 @@ else:
         # Buka file dalam mode 'rb' (read binary) untuk download button
         with open(file_path, "rb") as f:
             st.download_button(
-                label="Unduh Contoh File PDF",
+                label="Unduh Panduan Scraping Data",
                 data=f,
                 file_name="Panduan Data Scraping.pdf.pdf", # Nama file yang akan diterima pengguna
                 mime="pdf"
@@ -339,4 +340,4 @@ else:
         # Pesan ini akan muncul jika file contoh tidak ditemukan di folder
         st.error(f"File contoh '{file_path}' tidak ditemukan di repository.")
 
-st.markdown("---")
+
