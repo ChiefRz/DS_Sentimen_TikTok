@@ -30,11 +30,11 @@ def extract_aspects(text, aspect_keywords):
 def load_model_and_vectorizer():
     """Memuat model SVM dan TF-IDF Vectorizer."""
     try:
-        model = joblib.load('model_svm1.joblib')
-        vectorizer = joblib.load('vectorizer1.joblib')
+        model = joblib.load('model_svm.joblib')
+        vectorizer = joblib.load('vectorizer.joblib')
         return model, vectorizer
     except FileNotFoundError:
-        st.error("File 'model_svm1.joblib' atau 'vectorizer1.joblib' tidak ditemukan. Pastikan file berada di folder yang sama.")
+        st.error("File 'model_svm.joblib' atau 'vectorizer.joblib' tidak ditemukan. Pastikan file berada di folder yang sama.")
         st.stop()
 
 def preprocess_text(text):
