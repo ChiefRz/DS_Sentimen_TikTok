@@ -57,6 +57,7 @@ def load_normalization_dict(file_path='kamus_normalisasi.csv'):
 def preprocess_text(text):
     text = str(text).lower()
     tokens = text.split()
+    tokens = [norm_dict.get(word, word) for word in tokens]
     tokens = [word for word in tokens if word not in list_stopwords]
     tokens = [stemmer.stem(word) for word in tokens]
     return " ".join(tokens)
@@ -66,6 +67,7 @@ try:
 except LookupError:
     nltk.download('stopwords')
 
+norm_dict = load_normalization_dict()
 factory = StemmerFactory()
 stemmer = factory.create_stemmer()
 list_stopwords = set(stopwords.words('indonesian'))
