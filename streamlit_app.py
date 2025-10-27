@@ -13,8 +13,8 @@ ASPEK = {
     "Lokasi": ["venue", "lokasi", "tempat", "panggung", "stage", "semilir", "jawa", "jawa tengah", "semarang", "Semarang", "Bawen", "ungaran", "deket", "dekat", "jauh", "magelang", "wonosobo", "temanggung"]
 }
 
-@st.cache_resource
 
+@st.cache_resource
 def extract_aspects(text, aspect_keywords):
     found_aspects = []
     for aspect, keywords in aspect_keywords.items():
@@ -24,6 +24,7 @@ def extract_aspects(text, aspect_keywords):
                 break 
     return found_aspects
 
+@st.cache_resource
 def load_model_and_vectorizer():
     try:
         model = joblib.load('model_svm.joblib')
@@ -33,6 +34,7 @@ def load_model_and_vectorizer():
         st.error("File 'model_svm.joblib' atau 'vectorizer.joblib' tidak ditemukan. Pastikan file berada di folder yang sama.")
         st.stop()
 
+@st.cache_resource
 def load_normalization_dict(file_path='kamus_normalisasi.csv'):
     try:
         df_kamus = pd.read_csv(file_path)
