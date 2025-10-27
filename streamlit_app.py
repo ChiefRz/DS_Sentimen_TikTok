@@ -322,22 +322,34 @@ if uploaded_file is not None:
 else:
     st.warning("Silakan unggah file CSV melalui sidebar untuk memulai.")
     st.markdown("---")
-    st.subheader("Silakan unduh file dibawah untuk panduan Scraping Data")
-    
-    # Ganti 'contoh_data.csv' dengan nama file Anda yang ada di repository
-    file_path = 'Panduan Data Scraping.pdf' 
+
+    st.subheader("Mengenai Dataset")
+    st.write("Silahkan unduh file dibawah ini untuk mencoba aplikasi")
+    file_path_data = 'Data_Coba.csv' 
     
     try:
-        # Buka file dalam mode 'rb' (read binary) untuk download button
+        with open(file_path_data, "rb") as f:
+            st.download_button(
+                label="Dataset Tes",
+                data=f,
+                file_name="Data_Coba.csv", 
+                mime="csv"
+            )
+    except FileNotFoundError:
+        st.error(f"File contoh '{file_path_data}' tidak ditemukan di repository.")
+
+    st.write("Untuk bisa menggunakan dataset lainnya, Silakan unduh file dibawah untuk panduan Scraping Data")
+    
+    file_path = 'Panduan Data Scraping.pdf' 
+    try:
         with open(file_path, "rb") as f:
             st.download_button(
                 label="Unduh Panduan Scraping Data",
                 data=f,
-                file_name="Panduan Data Scraping.pdf.pdf", # Nama file yang akan diterima pengguna
+                file_name="Panduan Data Scraping.pdf",
                 mime="pdf"
             )
     except FileNotFoundError:
-        # Pesan ini akan muncul jika file contoh tidak ditemukan di folder
         st.error(f"File contoh '{file_path}' tidak ditemukan di repository.")
 
 
