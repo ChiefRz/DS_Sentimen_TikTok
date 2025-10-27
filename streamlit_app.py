@@ -18,7 +18,6 @@ ASPEK = {
 @st.cache_resource
 
 def extract_aspects(text, aspect_keywords):
-    """Mengekstrak aspek yang ditemukan dalam teks."""
     found_aspects = []
     for aspect, keywords in aspect_keywords.items():
         for keyword in keywords:
@@ -28,7 +27,6 @@ def extract_aspects(text, aspect_keywords):
     return found_aspects
 
 def load_model_and_vectorizer():
-    """Memuat model SVM dan TF-IDF Vectorizer."""
     try:
         model = joblib.load('model_svm.joblib')
         vectorizer = joblib.load('vectorizer.joblib')
@@ -37,12 +35,27 @@ def load_model_and_vectorizer():
         st.error("File 'model_svm.joblib' atau 'vectorizer.joblib' tidak ditemukan. Pastikan file berada di folder yang sama.")
         st.stop()
 
+def load_normalization_dict(file_path='kamus_normalisasi.csv'):
+    try:
+        df_kamus = pd.read_csv(file_path)
+        if len(df_kamus.columns) < 2:
+             st.error(f"File kamus '{file_path}' harus memiliki setidaknya 2 kolom.")
+             st.stop()
+        
+        keys = df_kamus.iloc[:, 0].astype(str).str.lower()
+        values = df_kamus.iloc[:, 1].astype(str).str.lower()
+        norm_dict = dict(zip(keys, values))
+        return norm_dict
+        
+    except FileNotFoundError:
+        st.error(f"File kamus '{file_path}' tidak ditemukan. Pastikan file berada di folder yang sama.")
+        st.stop()
+    except Exception as e:
+        st.error(f"Gagal memuat kamus normalisasi '{file_path}': {e}")
+        st.stop()
+
 def preprocess_text(text):
-    """Membersihkan dan menstandarisasi teks input."""
     text = str(text).lower()
-    text = re.sub(r'http\S+|www\S+|https\S+', '', text, flags=re.MULTILINE)
-    text = re.sub(r'\@\w+|\#', '', text)
-    text = re.sub(r'[^a-z\s]', '', text)
     tokens = text.split()
     tokens = [word for word in tokens if word not in list_stopwords]
     tokens = [stemmer.stem(word) for word in tokens]
