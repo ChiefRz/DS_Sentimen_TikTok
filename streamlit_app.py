@@ -322,7 +322,7 @@ if uploaded_file is not None:
 else:
     st.warning("Silakan unggah file CSV melalui sidebar untuk memulai.")
     st.markdown("---")
-    st.info("Silakan unduh file dibawah untuk panduan Scraping Data")
+    st.subheader("Silakan unduh file dibawah untuk panduan Scraping Data")
     
     # Ganti 'contoh_data.csv' dengan nama file Anda yang ada di repository
     file_path = 'Panduan Data Scraping.pdf' 
